@@ -1,0 +1,6 @@
+package ch.bgs.adventure.steps;
+
+
+public abstract class StepAbstract {
+
+}
