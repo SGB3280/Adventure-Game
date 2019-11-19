@@ -1,0 +1,14 @@
+package ch.bgs.adventure.steps;
+
+public class StepFinish extends StepAbstract {
+
+	private String finalText;
+
+	public String getFinalText() {
+		return finalText;
+	}
+
+	public void setFinalText(String finalText) {
+		this.finalText = finalText;
+	}
+}
