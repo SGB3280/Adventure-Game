@@ -1,0 +1,127 @@
+package ch.bgs.adventure;
+
+import java.util.HashMap;
+import java.util.Scanner;
+
+import ch.bgs.adventure.steps.StepAbstract;
+import ch.bgs.adventure.steps.StepFinish;
+import ch.bgs.adventure.steps.StepQuestionAnswer;
+
+public class AdventureRun {
+
+	private static boolean running = true;
+	
+	public static void main(String[] args) {
+		// Laden der initialen Frage
+		StepAbstract step = initSteps();
+		StepFinish finish = null;
+		
+		
+		//public static int anzahlLeben;
+		//int anzahlLeben = 0;
+		
+		
+
+		while(running) {
+			if(step.getClass().equals(StepQuestionAnswer.class)) {
+
+				System.out.println(" ");
+			
+				// Frage wird gestellt
+				System.out.print(((StepQuestionAnswer)step).getQuestion());
+				Scanner eingabe = new Scanner (System.in);
+				String answer = eingabe.next();
+
+				// Antwort wird ausgelesen bis gültige Antwort eingegeben wurde
+				if(((StepQuestionAnswer)step).getSteps().containsKey(answer)) {
+					// Aufgrund der Antwort, den nächsten Step definieren
+					step = ((StepQuestionAnswer)step).getSteps().get(answer);
+
+				}
+				continue;
+			} else {
+				// Definitiver Ausgang ausgeben
+				System.out.println(" ");
+				System.out.println(((StepFinish)step).getFinalText());
+				running = false;
+			}
+		}
+	}
+	
+	private static StepQuestionAnswer initSteps() {
+		// Antwort a für initiale Frage
+		StepFinish stepFinishA = new StepFinish();
+		stepFinishA.setFinalText("Der Drache hat dich besiegt!");
+		
+		StepFinish stepFinishE = new StepFinish();
+		stepFinishE.setFinalText("Der Drache kämpft nicht gegen Pussys. Du hast verloren:( ");
+		
+		StepFinish stepFinishF = new StepFinish();
+		stepFinishE.setFinalText("Dein ernst? Game Over, respawn kannst du auch vergessen");
+		
+		StepFinish stepFinishD = new StepFinish();
+		stepFinishD.setFinalText("Dein Ziel den Drachen zu töten wurde verfehlt. Weil du so ein Feigling bist stirbst du und kriegst noch 3 Minuspunkte");
+
+		
+		StepFinish stepFinishG = new StepFinish();
+		stepFinishG.setFinalText("Du hast es noch nicht begriffen. Komm in ein paar Jahren wieder");
+			
+		// Abschluss bei initialer Frage wenn Antwort "B" gegeben wurde
+		StepFinish stepFinishB = new StepFinish();
+		stepFinishB.setFinalText("Der Drache wurde besiegt!");
+
+		
+		StepQuestionAnswer questionF = new StepQuestionAnswer();
+		questionF.setQuestion("Natürlich bist du mal wieder ohne Waffe gekommen und somit hast du noch die kappute Lanze. Attackierst du ihn von hinten in den Panzer oder von oben in den Kopf? -> oben/hinten");
+		questionF.setSteps(new HashMap <>());
+		questionF.getSteps().put("hinten", stepFinishG);
+		questionF.getSteps().put("oben", stepFinishB);
+		
+		StepQuestionAnswer questionE = new StepQuestionAnswer();
+		questionE.setQuestion("Nach 8 Monaten gelingt es dir auszubrechen. Inzwischen bist du eine Richtige Fäzze geworden. Willst du es nocheinmal gegen den Drachen versuchen?-->ja/nein");
+		questionE.setSteps(new HashMap<>());
+		questionE.getSteps().put("ja", questionF);
+		questionE.getSteps().put("nein", stepFinishF);
+	
+		
+		StepQuestionAnswer questionD = new StepQuestionAnswer();
+		questionD.setQuestion("Die Dorfbewohner halten dich für verrückt. Du kommst für immer ins Gefängnis. Weil du so ein Lauch geworden bist, könntest du das vorgegrabene Loch weitergraben und versuchen auszubrechen. -->ja/nein");
+		questionD.setSteps(new HashMap<>());
+		questionD.getSteps().put("ja", questionE);
+		questionD.getSteps().put("nein", stepFinishF);
+		
+		
+		StepQuestionAnswer questionC =new StepQuestionAnswer();
+		questionC.setQuestion("Du hast die Lanze rausgezogen und der Drache ist am verbluten. Du Schwächling willst ihm helfen indem du.. A=Nach Hilfe schreist;B=Seine Blutung versuchst zu stoppen");
+		questionC.setSteps(new HashMap<>());
+		questionC.getSteps().put("a", questionD);
+		questionC.getSteps().put("b", stepFinishD);
+	
+		
+		StepQuestionAnswer questionB = new StepQuestionAnswer();
+		questionB.setQuestion(("Die Lanze zerbricht, als du seinen Panzer versucht hast zu durchdringen. Willst du.. A=Davonrennen;B=Die Lanze rausziehen"));
+		questionB.setSteps(new HashMap<>());
+		questionB.getSteps().put("a", stepFinishE);
+		questionB.getSteps().put("b", questionC);
+		
+		// Nächste Frage bei initialer Frage mit Antwort "A"
+		StepQuestionAnswer questionA = new StepQuestionAnswer();
+		questionA.setQuestion("Der Drache hat dein Schwert gesichtet und mit einem Überraschungshieb aus deiner Hand geschlagen. Was machst du nun? A=Davonrennen;B=Nach einer anderen Waffe umschauen");
+		questionA.setSteps(new HashMap<>());
+		questionA.getSteps().put("a", stepFinishE);
+		questionA.getSteps().put("b", questionB);
+		
+		// Initiale Frage (Top level)
+		StepQuestionAnswer initialQuestion = new StepQuestionAnswer();
+		initialQuestion.setQuestion("Wie willst du den Drachen besiegen? A=Schwert; B=Lanze");
+		initialQuestion.setSteps(new HashMap<>());
+		initialQuestion.getSteps().put("a", questionA);
+		initialQuestion.getSteps().put("b", questionB);
+		
+
+		return initialQuestion;
+		
+		
+	}
+
+}
