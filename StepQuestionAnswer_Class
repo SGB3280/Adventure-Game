@@ -1,0 +1,26 @@
+package ch.bgs.adventure.steps;
+
+import java.util.Map;
+
+public class StepQuestionAnswer extends StepAbstract {
+
+	private String question;
+	private Map<String, StepAbstract> steps;
+
+	public Map<String, StepAbstract> getSteps() {
+		return steps;
+	}
+
+	public void setSteps(Map<String, StepAbstract> steps) {
+		this.steps = steps;
+	}
+
+	public String getQuestion() {
+		return this.question;
+	}
+	
+	public void setQuestion(String question) {
+		this.question = question;
+	}
+	
+}
